@@ -1,72 +1,79 @@
-import axios from "axios"
-import { useState } from "react"
-import toast from "react-hot-toast"
-import { Navigate, useNavigate } from "react-router-dom"
+import axios from "axios";
+import { useState } from "react";
+import toast from "react-hot-toast";
+import { useNavigate } from "react-router-dom";
 
+export default function Login() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
 
-export default function Login(){
+    function handleOnSubmit(e) {
+        e.preventDefault();
+        const backendUrl = import.meta.env.VITE_BACKEND_URL;
 
-    const [email, setEmail] = useState("")
-    const [password, setPassword] = useState("")
-    const navigate = useNavigate()
+        axios
+            .post(`${backendUrl}/api/users/login`, {
+                email,
+                password,
+            })
+            .then((res) => {
+                toast.success("Login Success");
+                const user = res.data.user;
+                localStorage.setItem("token", res.data.token);
 
-    function handleOnSubmit(e){
-        e.preventDefault()
-        console.log(e)
-        console.log(email, password)
-        const backendUrl = import.meta.env.VITE_BACKEND_URL
-
-        axios.post("http://localhost:3000/api/users/login",{
-            email: email,
-            password: password
-        }  
-        ).then((res)=>{
-            console.log(res)
-            toast.success("Login Success")
-            const user = res.data.user
-            localStorage.setItem("token",res.data.token)
-
-            if(user.role === "admin"){
-                navigate("/admin/")
-            }else{
-                navigate("/")
-            }
-        }).catch((err)=>{
-            console.log(err)
-            toast.error(err.response.data.error)
-        })
+                if (user.role === "admin") {
+                    navigate("/admin/");
+                } else {
+                    navigate("/");
+                }
+            })
+            .catch((err) => {
+                console.error(err);
+                toast.error(err.response?.data?.error || "Login failed");
+            });
     }
-    return(
-        <div className="w-full h-screen flex items-center justify-center">
-            <div className="w-[400px] h-[500px] flex items-center justify-center bg-blue-100"></div>
-            <div className="w-[400px] h-[500px] flex items-center justify-center bg-red-300">
-                <form onSubmit={handleOnSubmit}>
-                    <div className="p-[50px]">
-                        <input 
-                            type="email" 
-                            placeholder="Enter your Email" 
-                            className="w-[300px] h-[40px] rounded-md border border-gray-400 text-center mb-[30px]"
+
+    return (
+        <div className="w-full h-screen flex items-center justify-center bg-gray-100">
+            <div className="flex w-[800px] h-[500px] shadow-2xl rounded-2xl overflow-hidden">
+                {/* Left Panel (Brand or Image) */}
+                <div className="w-1/2 bg-accent flex items-center justify-center text-white text-3xl font-bold">
+                    Welcome Back!
+                </div>
+
+                {/* Right Panel (Login Form) */}
+                <div className="w-1/2 bg-secondary flex items-center justify-center">
+                    <form
+                        onSubmit={handleOnSubmit}
+                        className="w-full max-w-[320px] flex flex-col"
+                    >
+
+                        <input
+                            type="email"
+                            placeholder="Email"
                             value={email}
-                            onChange={(e)=>{
-                                setEmail(e.target.value)
-                            }}
-
+                            onChange={(e) => setEmail(e.target.value)}
+                            className="mb-4 p-3 rounded-md text-center text-black border border-gray-600 focus:outline-none focus:ring-2 focus:ring-accent"
                         />
-                        
-                        <input 
-                            type="password" 
-                            placeholder="Enter your Password" 
-                            className="w-[300px] h-[40px] rounded-md border border-gray-400 text-center mb-[40px]"
+
+                        <input
+                            type="password"
+                            placeholder="Password"
                             value={password}
-                            onChange={(e)=>{
-                                setPassword(e.target.value)
-                            }}
+                            onChange={(e) => setPassword(e.target.value)}
+                            className="mb-6 p-3 rounded-md text-center text-black border border-gray-600 focus:outline-none focus:ring-2 focus:ring-accent"
                         />
 
-                        <button className="ml-[10px] bg-accent h-[30px] w-[280px] rounded-md">Sign in</button>
-                    </div>
-                </form>
+                        <button
+                            type="submit"
+                            className="bg-accent text-white py-2 rounded-md hover:opacity-90 transition"
+                        >
+                            Sign In
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
-    )
+    );
 }

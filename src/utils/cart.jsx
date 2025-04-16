@@ -29,7 +29,6 @@ export function loadCart() {
     }
 }
 
-
 export function addToCart(key, qty){
     const cart = loadCart();
     let found = false;

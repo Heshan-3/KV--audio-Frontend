@@ -7,8 +7,10 @@ import BookingPage from "./bookingPage";
 import ProductOverview from "./productOverview";
 import Home from "./home";
 import ErrorNotFound from "./error";
+import Footer from "../../components/footer";
 
 export default function HomePage(){
+    
     return(
         <>
             <Header/>
@@ -23,6 +25,7 @@ export default function HomePage(){
                     <Route path="/*" element={<ErrorNotFound/>}/>
                 </Routes>
             </div>
+            <Footer/>
         </>
     )
 }

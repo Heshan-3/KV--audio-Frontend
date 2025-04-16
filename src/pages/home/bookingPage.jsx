@@ -63,7 +63,7 @@ export default function BookingPage() {
 
     return (
         <div className="w-full flex justify-center px-4 py-8">
-            <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl border-t-1 border-gray-200 p-8 mt-28">
+            <div className="w-full max-w-3xl bg-white rounded-2xl shadow-2xl border-t-1 border-gray-200 p-8 mt-28 mb-16">
                 <h1 className="text-3xl font-bold text-accent text-center mb-6">Create Booking</h1>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
